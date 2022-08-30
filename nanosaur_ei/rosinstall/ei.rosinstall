@@ -1,0 +1,8 @@
+- git:
+    local-name: nanosaur
+    version: foxy
+    uri: https://github.com/rnanosaur/nanosaur.git
+- git:
+    local-name: edgeimpulse_ros
+    version: 0.0.1
+    uri: https://github.com/gbr1/edgeimpulse_ros.git

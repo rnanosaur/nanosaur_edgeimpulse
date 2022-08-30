@@ -35,3 +35,24 @@ ENV CUDA=10.2
 # Disable terminal interaction for apt
 ENV DEBIAN_FRONTEND=noninteractive
 
+################ NANOSAUR PKGS ####################
+
+# Download and build nanosaur_ei
+ENV ROS_WS /opt/ros_ws
+
+# Copy wstool ei.rosinstall
+COPY nanosaur_ei/rosinstall/ei.rosinstall ei.rosinstall
+
+RUN mkdir -p ${ROS_WS}/src && \
+    vcs import ${ROS_WS}/src < ei.rosinstall
+
+ADD . $ROS_WS/src/nanosaur_ei
+
+# Change workdir
+WORKDIR $ROS_WS
+
+# Build nanosaur edge impulse package
+RUN . /opt/ros/$ROS_DISTRO/install/setup.sh && \
+    colcon build --symlink-install \
+    --cmake-args \
+    -DCMAKE_BUILD_TYPE=Release
