@@ -49,7 +49,7 @@ RUN mkdir -p ${ROS_WS}/src && \
 ADD . $ROS_WS/src/nanosaur_ei
 
 # Change workdir
-WORKDIR $ROS_WS
+WORKDIR $ROS_WS/src/nanosaur_ei
 
 # Build nanosaur edge impulse package
 RUN . /opt/ros/$ROS_DISTRO/install/setup.sh && \

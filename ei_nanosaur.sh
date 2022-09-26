@@ -65,12 +65,21 @@ main()
         usage
         exit 0
     elif [ $option = "run" ] ; then
-        docker run -it --rm nanosaur/edge_impulse:latest bash
+        echo "${green}Run Edge Impulse nanosaur docker debug ${reset}"
+        echo " - ${bold}Load volume:${reset} ${yellow}$(pwd)${reset}" >&2
+        #local pwd=$(pwd)
+        #echo $local_folder
+        docker run -it --rm -v $(pwd):/opt/ros_ws/src/nanosaur_ei nanosaur/edge_impulse:latest bash
         exit 0
     elif [ $option = "build" ] ; then
-        # cover $arguments
+        local CI_OPTIONS=""
+        if [[ $arguments = "CI" ]] ; then
+            # Set no-cache and pull before build
+            # https://newbedev.com/what-s-the-purpose-of-docker-build-pull
+            CI_OPTIONS="--no-cache --pull"
+        fi
         echo "${green}Build Edge Impulse nanosaur docker ${reset}"
-        docker build -t nanosaur/edge_impulse:latest .
+        docker build $CI_OPTIONS -t nanosaur/edge_impulse:latest .
         exit 0
     fi
 
