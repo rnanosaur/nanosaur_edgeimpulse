@@ -23,42 +23,20 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Jetpack 4.6.1
-# Docker file for aarch64 based Jetson device
-FROM dustynv/ros:foxy-ros-base-l4t-r32.7.1
-# L4T variables
-ENV L4T=32.7
-ENV L4T_MINOR_VERSION=7.1
-# Configuration CUDA
-ENV CUDA=10.2
-
-# Disable terminal interaction for apt
-ENV DEBIAN_FRONTEND=noninteractive
-
-################ NANOSAUR PKGS ####################
-
-# Download and build nanosaur_ei
-ENV ROS_WS /opt/ros_ws
-
-# Copy wstool ei.rosinstall
-COPY nanosaur_ei/rosinstall/ei.rosinstall ei.rosinstall
-
-RUN mkdir -p ${ROS_WS}/src && \
-    vcs import ${ROS_WS}/src < ei.rosinstall
-
-ADD . $ROS_WS/src/nanosaur_ei
-
-# Change workdir
-WORKDIR $ROS_WS
-
-# Build nanosaur edge impulse package
-RUN . /opt/ros/$ROS_DISTRO/install/setup.sh && \
-    colcon build --symlink-install \
-    --cmake-args \
-    -DCMAKE_BUILD_TYPE=Release
-
-# https://docs.docker.com/engine/reference/builder/#stopsignal
-# https://hynek.me/articles/docker-signals/
-STOPSIGNAL SIGINT
-# run ros package launch file
-# CMD ["ros2", "launch", "nanosaur_bringup", "bringup.launch.py"]
+version: "3.9"
+services:
+  perception:
+    image: nanosaur/edge_impulse:latest
+    network_mode: ${DOCKER_NETWORK:-host}
+    restart: always
+    privileged: true
+    depends_on:
+      - "core"
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
+      - RMW_IMPLEMENTATION=${NANOSAUR_RMW:-rmw_cyclonedds_cpp}
+    labels:
+      - "com.centurylinklabs.watchtower.scope=nanosaur"
+    volumes:
+      # if you want change the nanosaur configuration
+      # Read https://github.com/rnanosaur/nanosaur/wiki/configuration
