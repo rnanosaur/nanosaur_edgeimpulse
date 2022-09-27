@@ -40,10 +40,18 @@ def generate_launch_description():
         }],
         remappings=[('/detection/input/image', '/input_test')],
     )
+    
+    ei_controller_node = Node(
+        package='nanosaur_ei_controller',
+        executable='nanosaur_ei_controller',
+        name='nanosaur_ei_controller',
+    )
+
 
     ld = LaunchDescription()
 
     ld.add_action(ei_node)
+    ld.add_action(ei_controller_node)
 
     return ld
 # EOF
