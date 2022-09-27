@@ -56,7 +56,7 @@ RUN mkdir -p ${ROS_WS}/src && \
 ADD . $ROS_WS/src/nanosaur_ei
 
 # Change workdir
-WORKDIR $ROS_WS/src/nanosaur_ei
+WORKDIR $ROS_WS
 
 # Build nanosaur edge impulse package
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
@@ -64,8 +64,17 @@ RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
     --cmake-args \
     -DCMAKE_BUILD_TYPE=Release
 
+######### Download Edge Impulse model #############
+
+ENV EI_MODEL /opt/ei
+
+RUN mkdir -p ${EI_MODEL} && \
+    git clone https://github.com/gbr1/edgeimpulse_example_models.git ${EI_MODEL}
+
+########## Setup Model ############################
+
 # https://docs.docker.com/engine/reference/builder/#stopsignal
 # https://hynek.me/articles/docker-signals/
 STOPSIGNAL SIGINT
 # run ros package launch file
-# CMD ["ros2", "launch", "nanosaur_bringup", "bringup.launch.py"]
+CMD ["ros2", "launch", "nanosaur_ei", "edge_impulse.launch.py"]

@@ -17,4 +17,16 @@ Meet nanosaur:
 
 --------------
 
-nanosaur on Edge Impulse
+# nanosaur on Edge Impulse
+
+
+From docker run
+
+```
+./nanosaur_ei.sh run
+```
+
+```
+source install/setup.bash
+ros2 launch nanosaur_ei edge_impulse.launch.py
+```

@@ -69,7 +69,7 @@ main()
         echo " - ${bold}Load volume:${reset} ${yellow}$(pwd)${reset}" >&2
         #local pwd=$(pwd)
         #echo $local_folder
-        docker run -it --rm -v $(pwd):/opt/ros_ws/src/nanosaur_ei nanosaur/edge_impulse:latest bash
+        docker run -it --rm --network host -v $(pwd):/opt/ros_ws/src/nanosaur_ei nanosaur/edge_impulse:latest bash
         exit 0
     elif [ $option = "build" ] ; then
         local CI_OPTIONS=""
