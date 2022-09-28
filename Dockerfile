@@ -69,7 +69,10 @@ RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
 ENV EI_MODEL /opt/ei
 
 RUN mkdir -p ${EI_MODEL} && \
-    git clone https://github.com/gbr1/edgeimpulse_example_models.git ${EI_MODEL}
+    git clone https://github.com/gbr1/edgeimpulse_example_models.git ${EI_MODEL} && \
+    chmod +x ${EI_MODEL}/models/ssd/person_detection/person-detection-linux-aarch64-v42.eim
+#    chmod +x ${EI_MODEL}/models/models/fomo/beer_vs_can/beer-vs.-cans-fomo-linux-aarch64-v12.eim
+
 
 ########## Setup Model ############################
 

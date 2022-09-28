@@ -35,14 +35,16 @@ def generate_launch_description():
         package='edgeimpulse_ros',
         executable='image_classification',
         name='image_classification',
+        namespace='nanosaur',
         parameters=[{
-            'model.filepath': '/opt/ei/models/fomo/beer_vs_can/beer-vs.-cans-fomo-linux-aarch64-v12.eim',
+            'model.filepath': '/opt/ei/models/ssd/person_detection/person-detection-linux-aarch64-v42.eim',
         }],
-        remappings=[('/detection/input/image', '/input_test')],
+        remappings=[('/detection/input/image', 'camera/color/image_raw')],
     )
     
     ei_controller_node = Node(
         package='nanosaur_ei_controller',
+        namespace='nanosaur',
         executable='nanosaur_ei_controller',
         name='nanosaur_ei_controller',
     )

@@ -4,5 +4,5 @@
     uri: https://github.com/rnanosaur/nanosaur.git
 - git:
     local-name: edgeimpulse_ros
-    version: 0.0.1
+    version: 0.0.2
     uri: https://github.com/gbr1/edgeimpulse_ros.git
