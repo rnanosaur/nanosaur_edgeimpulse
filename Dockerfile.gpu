@@ -25,24 +25,16 @@
 
 # Jetpack 4.6.1
 # Docker file for aarch64 based Jetson device
-FROM dustynv/ros:foxy-ros-base-l4t-r32.7.1
-# L4T variables
-ENV L4T=32.7
-ENV L4T_MINOR_VERSION=7.1
-# Configuration CUDA
-ENV CUDA=10.2
-
-# Disable terminal interaction for apt
-ENV DEBIAN_FRONTEND=noninteractive
+FROM nanosaur/perception:foxy
 
 ################ EDGE IMPULSE ##################################
 
 RUN apt update && \
-    apt-get install -y libatlas-base-dev libportaudio2 libportaudiocpp0 portaudio19-dev && \
+    apt-get install -y libatlas-base-dev libportaudio2 libportaudiocpp0 portaudio19-dev python3-pip && \
     pip3 install pyaudio scikit-build && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install numpy
+#RUN pip3 install numpy
 RUN pip3 install edge_impulse_linux 
 
 ################ NANOSAUR EDGE IMPULSE PKGS ####################
@@ -51,26 +43,29 @@ RUN pip3 install edge_impulse_linux
 ENV ROS_WS /opt/ros_ws
 
 # Copy wstool ei.rosinstall
+RUN mkdir -p ${ROS_WS}/src && \
+    cd ${ROS_WS}
 COPY nanosaur_ei/rosinstall/ei.rosinstall ei.rosinstall
 
-RUN mkdir -p ${ROS_WS}/src && \
-    vcs import ${ROS_WS}/src < ei.rosinstall 
-#    && \
-#    rosdep install --from-paths $ROS_WS/src --ignore-src -r -y
+RUN vcs import ${ROS_WS}/src < ei.rosinstall 
 
 ADD . $ROS_WS/src/nanosaur_ei
 
 # Change workdir
-WORKDIR $ROS_WS/src/nanosaur_ei
+#WORKDIR $ROS_WS/src/nanosaur_ei
 
-# Build nanosaur edge impulse package
+# Build Isaac ROS
 RUN . /opt/ros/$ROS_DISTRO/install/setup.sh && \
-    colcon build --symlink-install \
+    . $ISAAC_ROS_WS/install/setup.sh && \
+    cd $ROS_WS && \
+    colcon build --symlink-install --merge-install \
     --cmake-args \
     -DCMAKE_BUILD_TYPE=Release
 
 # https://docs.docker.com/engine/reference/builder/#stopsignal
 # https://hynek.me/articles/docker-signals/
 STOPSIGNAL SIGINT
-# run ros package launch file
-# CMD ["ros2", "launch", "nanosaur_bringup", "bringup.launch.py"]
+# source ros package from entrypoint
+RUN sed --in-place --expression \
+      '$isource "$ROS_WS/install/setup.bash"' \
+      /ros_entrypoint.sh

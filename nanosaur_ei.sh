@@ -89,3 +89,5 @@ main()
 main $@
 exit 0
 # EOF
+
+docker build -t nanosaur/edge_impulse:test .
