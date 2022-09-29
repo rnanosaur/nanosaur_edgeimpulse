@@ -35,16 +35,20 @@ def generate_launch_description():
         package='edgeimpulse_ros',
         executable='image_classification',
         name='image_classification',
-        namespace='nanosaur',
+        namespace='nanosaur/edge_impulse',
         parameters=[{
             'model.filepath': '/opt/ei/models/ssd/person_detection/person-detection-linux-aarch64-v42.eim',
         }],
-        remappings=[('/detection/input/image', 'camera/color/image_raw')],
+        remappings=[('/detection/input/image', '/nanosaur/camera/color/image_raw'),
+                    ('/detection/output/results', 'results'),
+                    ('/detection/output/info', 'info'),
+                    ('/detection/output/image', 'image'),
+                    ],
     )
     
     ei_controller_node = Node(
         package='nanosaur_ei_controller',
-        namespace='nanosaur',
+        namespace='nanosaur/edge_impulse',
         executable='nanosaur_ei_controller',
         name='nanosaur_ei_controller',
     )

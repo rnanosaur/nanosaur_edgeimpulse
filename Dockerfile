@@ -60,7 +60,7 @@ WORKDIR $ROS_WS
 
 # Build nanosaur edge impulse package
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
-    colcon build --symlink-install \
+    colcon build --symlink-install --merge-install \
     --cmake-args \
     -DCMAKE_BUILD_TYPE=Release
 
