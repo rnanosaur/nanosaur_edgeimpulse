@@ -1,4 +1,4 @@
-# 🦕✴️ nanosaur_ei
+# 🦕✴️ nanosaur_edgeimpulse
 
 [![Discord](https://img.shields.io/discord/797461428646707211)](https://discord.gg/YvxjxEFPkb) [![GitHub Org's stars](https://img.shields.io/github/stars/rnanosaur?style=social)](https://github.com/rnanosaur) [![Twitter Follow](https://img.shields.io/twitter/follow/raffaello86?style=social)](https://twitter.com/raffaello86) [![robo.panther](https://img.shields.io/badge/Follow:-robo.panther-E4405F?style=social&logo=instagram)](https://www.instagram.com/robo.panther/)
 
@@ -19,6 +19,7 @@ Meet nanosaur:
 
 # nanosaur on Edge Impulse
 
+Run a tiny AI with Edge Impulse.  
 
 From docker run
 
